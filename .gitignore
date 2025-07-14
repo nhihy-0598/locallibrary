@@ -1,0 +1,9 @@
+db.sqlite3
+__pycache__/
+/catalog/__pycache__/
+/locallibrary/__pycache__/
+/catalog/migrations/__pycache__pycache/
+*.pyc
+*.pyo
+*.pyd 
+.env
