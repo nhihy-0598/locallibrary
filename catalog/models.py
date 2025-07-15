@@ -13,7 +13,7 @@ class Genre(models.Model):
     def __str__(self):
         """String for representing the Model object."""
         return self.name
-    
+
 class Language(models.Model):
     """Model representing a language"""
     name = models.CharField(max_length=MAX_LENGTH_NAME, help_text="Enter the book's natural language")
@@ -25,18 +25,14 @@ class Language(models.Model):
 class Book(models.Model):
     """Model representing a book (but not a specific copy of a book)."""
     title = models.CharField(max_length=MAX_LENGTH_NAME)
-
     author = models.ForeignKey('Author', on_delete=models.SET_NULL, null=True)
-
     summary = models.TextField(max_length=MAX_LENGTH_SUMMARY, help_text='Enter a brief description of the book')
-    
     isbn = models.CharField(
         'ISBN',
         max_length=MAX_LENGTH_ISBN,
         unique=True,
         help_text='13 Character ISBN number'
     )
-
     genre = models.ManyToManyField(Genre, help_text='Select a genre for this book')
 
     language = models.ForeignKey('Language', on_delete=models.SET_NULL, null=True)
@@ -59,12 +55,14 @@ class BookInstance(models.Model):
     book = models.ForeignKey('Book', on_delete=models.RESTRICT)
     imprint = models.CharField(max_length=MAX_LENGTH_NAME)
     due_back = models.DateField(null=True, blank=True)
+
     LOAN_STATUS = (
         ('m', 'Maintenance'),
         ('o', 'On loan'),
         ('a', 'Available'),
         ('r', 'Reserved'),
     )
+
     status = models.CharField(
         max_length=1,
         choices=LOAN_STATUS,
@@ -79,7 +77,7 @@ class BookInstance(models.Model):
     def __str__(self):
         """String for representing the Model object."""
         return f'{self.id} ({self.book.title})'
-    
+
 class Author(models.Model):
     """Model representing an author."""
     first_name = models.CharField(max_length=MAX_LENGTH_AUTHOR_NAME)
@@ -96,5 +94,4 @@ class Author(models.Model):
 
     def __str__(self):
         """String for representing the Model object."""
-        return f'{self.last_name}, {self.first_name}' 
-    
+        return f'{self.last_name}, {self.first_name}'
