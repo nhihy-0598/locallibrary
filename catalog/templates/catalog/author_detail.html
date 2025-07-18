@@ -1,0 +1,31 @@
+{% extends "base_generic.html" %}
+{% load i18n %}
+{% block content %}
+    <h2> {% trans "Author" %}: {{ author.last_name }}, {{ author.first_name }}</h2>
+    <p>{{ author.date_of_birth|date:"d/m/Y" }} - {{ author.date_of_death|date:"d/m/Y" }}</p>
+    <h3>{% trans "Books" %}:</h3>
+    {% if author.book_set.all %}
+        <p>
+            {% for book in author.book_set.all %}
+                {{ book.title }}{% if not forloop.last %}, {% endif %}
+            {% endfor %}
+        </p>
+    {% else %}
+        <p>{% trans "No books available." %}</p>
+    {% endif %}
+{% endblock %}
+
+{% block sidebar %}
+  {{ block.super }}
+  {% if perms.catalog.change_author or perms.catalog.delete_author %}
+  <hr>
+  <ul class="sidebar-nav">
+    {% if perms.catalog.change_author %}
+      <li><a href="{% url 'author-update' author.id %}">{% trans "Update author" %}</a></li>
+    {% endif %}
+    {% if not author.book_set.all and perms.catalog.delete_author %}
+      <li><a href="{% url 'author-delete' author.id %}">{% trans "Delete author" %}</a></li>
+    {% endif %}
+    </ul>
+  {% endif %}
+{% endblock %}
