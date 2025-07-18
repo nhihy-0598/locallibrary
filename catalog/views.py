@@ -1,6 +1,9 @@
 from django.shortcuts import render, get_object_or_404
 from catalog.models import Book, Author, BookInstance, Genre
 from django.views import generic
+from django.contrib.auth.decorators import login_required, permission_required
+from django.contrib.auth.mixins import LoginRequiredMixin
+
 from catalog.constants import (
     DEFAULT_PAGINATE_BY,
     BOOKINSTANCE_STATUS_AVAILABLE,
@@ -62,3 +65,16 @@ def index(request):
     }
     
     return render(request, 'index.html', context=context)
+
+class LoanedBooksByUserListView(LoginRequiredMixin,generic.ListView):
+    """Generic class-based view listing books on loan to current user."""
+    model = BookInstance
+    template_name = 'catalog/bookinstance_list_borrowed_user.html'
+    paginate_by = DEFAULT_PAGINATE_BY
+
+    def get_queryset(self):
+        return (
+            BookInstance.objects.filter(borrower=self.request.user)
+            .filter(status__exact=BOOKINSTANCE_STATUS_ON_LOAN)
+            .order_by('due_back')
+        )
