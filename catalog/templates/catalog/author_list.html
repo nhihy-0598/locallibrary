@@ -1,0 +1,16 @@
+{% extends "base_generic.html" %}
+{% load i18n %}
+{% block content %}
+  <h2>{% trans "All Authors" %}</h2>
+  <ul>
+    {% for author in author_list %}
+      <li>
+        <a href="{% url 'author-detail' author.pk %}">
+          {{ author.last_name }}, {{ author.first_name }}
+        </a>
+      </li>
+    {% empty %}
+      <li>{% trans "No authors available." %}</li>
+    {% endfor %}
+  </ul>
+{% endblock %}

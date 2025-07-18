@@ -135,3 +135,7 @@ class AuthorDelete(PermissionRequiredMixin, DeleteView):
 
 class AuthorDetailView(generic.DetailView):
     model = Author
+
+class AuthorListView(generic.ListView):
+    model = Author
+    paginate_by = DEFAULT_PAGINATE_BY
