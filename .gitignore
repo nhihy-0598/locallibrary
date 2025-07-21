@@ -5,3 +5,4 @@ __pycache__/
 /catalog/migrations/__pycache__pycache/
 .env
 sample_data.sql
+catalog/fixtures/
